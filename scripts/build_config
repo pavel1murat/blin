@@ -1,0 +1,28 @@
+#!/bin/bash
+
+dir=include
+
+# echo [build_config]: pwd  `pwd`
+#------------------------------------------------------------------------------
+# blin and its subpackages
+#------------------------------------------------------------------------------
+if [ ! -d $dir/blin ] ; then mkdir -p $dir/blin ; fi
+
+# for d in alg base gui loop mod obj val ; do
+for d in alg ana base geom gui loop mod obj val ; do
+    if [[ -e blin/$d ]] && [[ ! -e $dir/blin/$d ]] ; then 
+	echo `pwd`$0 : creating symbolic link $dir/blin/$d
+	ln -s ../../blin/$d/$d $dir/blin/$d
+    fi
+done
+#------------------------------------------------------------------------------
+# SCons-related things: executed from blin
+#------------------------------------------------------------------------------
+if [ ! -d ./site_scons ] ; then
+    mkdir ./site_scons
+    cp blin/scripts/site_init.py       ./site_scons/.
+    cp blin/scripts/stntuple_helper.py ./site_scons/.
+fi
+
+if [ ! -f ./.rootrc     ] ; then cp blin/scripts/.rootrc     ./. ; fi
+if [ ! -f ./rootlogon.C ] ; then cp blin/scripts/rootlogon.C ./. ; fi
